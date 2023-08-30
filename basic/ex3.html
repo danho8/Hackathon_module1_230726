@@ -1,0 +1,80 @@
+<!-- Viết một chương trình nhập vào tháng và năm và in ra số ngày của tháng đó[20 điểm]
+● Đầu vào : nhập tháng 8 năm 2023
+● Đầu ra : số ngày trong tháng đó là 31 -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day in Month</title>
+</head>
+<body>
+
+    <h4>Nhập tháng và năm:</h4>
+    <input type="text" id="input-month" placeholder="Nhập tháng">
+    <input type="text" id="input-year" placeholder="Nhập năm">
+    <button id="click-answer" onclick="showAnswer()">Kết quả</button><br>
+    <span>Kết quả: <span id="answer"></span></span>
+
+    
+</body>
+
+<script>
+    function showAnswer() {
+        const getInputMonth = document.getElementById("input-month");
+        const getInputYear = document.getElementById("input-year");
+        const getAnswer = document.getElementById("answer");
+        const getInputMonthValue = getInputMonth.value;
+        const getInputYearValue = getInputYear.value;
+        const month = parseInt(getInputMonthValue);
+        const year = parseInt(getInputYearValue);
+        if(typeof month == "number" && typeof year == "number" && month > 0 && month < 13 && year > 0){
+            switch(month){
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 12:
+                case 10:
+                    getAnswer.innerHTML = "Tháng " + month + " năm " + year + " có 31 ngày";
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    getAnswer.innerHTML = "Tháng " + month + " năm " + year + " có 30 ngày";
+                    break;
+                case 2:
+                    if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
+                        getAnswer.innerHTML = "Tháng " + month + " năm " + year + " có 29 ngày";
+                    }else{
+                        getAnswer.innerHTML = "Tháng " + month + " năm " + year + " có 28 ngày";
+                    }
+                    break;
+            }
+
+            //ngoài switch case có thể làm theo if else như sau
+        //     if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 12) {
+        //     getAnswer.innerHTML = "31 ngày";
+        // } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+        //     getAnswer.innerHTML = "30 ngày";
+        // } else if (month == 2) {
+        //     if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+        //         getAnswer.innerHTML = "29 ngày";
+        //     } else {
+        //         getAnswer.innerHTML = "28 ngày";
+        //     }
+        // } else {
+        //     getAnswer.innerHTML = "Nhập sai tháng";
+        // }
+
+        }else{
+            getAnswer.innerHTML = "Vui lòng nhập đúng định dạng";
+        }
+       
+    }
+</script>
+</html>

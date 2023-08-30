@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sort</title>
+  </head>
+  <body>
+    <h4>Nhập mảng:</h4>
+    <input type="text" id="input-array" placeholder="Nhập mảng" />
+    <button id="click-answer" onclick="showAnswer()">Kết quả</button><br />
+    <span>Kết quả: <span id="answer"></span></span>
+  </body>
+  <script>
+    function showAnswer() {
+      const getInputArray = document.getElementById("input-array");
+      const getAnswer = document.getElementById("answer");
+      const getInputArrayValue = getInputArray.value;
+      const array = getInputArrayValue.split(",");
+      const newArray = array.map(item => parseInt(item));
+        //không dùng hàm sort
+        let arraySort = [];
+        for(let i = 0; i < newArray.length; i++){
+            for(let j = i + 1; j < newArray.length; j++){
+                if(newArray[i] < newArray[j]){
+                    let temp = newArray[i];
+                    newArray[i] = newArray[j];
+                    newArray[j] = temp;
+                }
+            }
+            arraySort.push(newArray[i]);
+        }
+        // dùng hàm sort
+        // newArray.sort((a, b) => b - a);
+      getAnswer.innerHTML = arraySort;
+    }
+  </script>
+</html>

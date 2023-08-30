@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LowAndUpText</title>
+  </head>
+  <body>
+    <h4>Nhập chữ vào ô input:</h4>
+    <input type="text" id="input-text" />
+    <button id="click-answer-text" onclick="showAnswerText()">Kết quả</button><br>
+   <span>Kết quả: <span id="answer-text"></span></span>
+  </body>
+  <script>
+    function showAnswerText() {
+      const getInput = document.getElementById("input-text");
+      const getInputValue = getInput.value;
+      const getAnswerText = document.getElementById("answer-text");
+        getAnswerText.innerHTML = "";
+      getInputValue.split("").forEach((item, index) => {
+        if (item == item.toUpperCase()) {
+          getAnswerText.innerHTML += item.toLowerCase();
+        } else {
+          getAnswerText.innerHTML += item.toUpperCase();
+        }
+      });
+
+    }
+  </script>
+</html>

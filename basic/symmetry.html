@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h4> Vui lòng  nhập chuỗi</h4>
+    <input type="text" id="stringInput">
+    <button onclick="myFunction()">Kết quả</button><br><br>
+   <span>Kết quả:<span id="result">  </span></span>
+    
+</body>
+
+<script>
+    function myFunction() {
+        var str = document.getElementById("stringInput").value;
+        var strReverse = str.split("").reverse().join("");
+        if (str == strReverse) {
+            document.getElementById("result").innerHTML = "Chuỗi đối xứng";
+        } else {
+            document.getElementById("result").innerHTML = "Chuỗi không đối xứng";
+        }
+    }
+</script>
+
+</html>

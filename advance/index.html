@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List students</title>
+    <style>
+      .container {
+        display: flex;
+        justify-content: space-between;
+      }
+      .input-infor-student {
+        width: 40%;
+        border: 1px solid black;
+        padding: 20px;
+      }
+      .list-student {
+        width: 55%;
+        border: 1px solid black;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border: 1px solid black;
+      }
+      th {
+        border: 1px solid black;
+      }
+      td {
+        border: 1px solid black;
+      }
+
+      label {
+        display: inline-block;
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="input-infor-student">
+        <h1>Thông tin học viên</h1>
+        <form action="">
+          <label for="name">Họ và tên:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Nhập họ và tên"
+          /><br /><br />
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Nhập email"
+          /><br /><br />
+          <label for="phone">Số điện thoại:</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            placeholder="Nhập số điện thoại"
+          /><br /><br />
+          <label for="address">Quê quán:</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            placeholder="Nhập quê quán"
+          /><br /><br />
+          <label for="gender">Giới tính:</label>
+          <input type="radio" value="male" checked name="gender" id="male" />
+          <label for="nam">Nam</label>
+          <input type="radio" value="female" name="gender" id="female" />
+          <label for="nu">Nữ</label><br /><br />
+          <button id="submit-input" onclick="submitStudent()">Lưu lại</button>
+        </form>
+      </div>
+
+      <div class="list-student">
+        <h1>Danh sách học viên</h1>
+        <span>Tìm kiếm:</span>
+        <input
+          type="text"
+          id="search"
+          name="search"
+          placeholder="Nhập tên học viên"
+        /><button onclick="searchStudent()">Tìm kiếm</button><br /><br />
+        <table id="table-render">
+          <tr>
+            <th>STT</th>
+            <th>Họ và tên</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Quê quán</th>
+            <th>Giới tính</th>
+            <th>Chức năng</th>
+            <th>
+              <button onclick="sortAlphaB()">Sắp xếp theo (alpha b)</button>
+            </th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Nguyễn Văn A</td>
+            <td>rikke@gmail.com</td>
+            <td>0123456789</td>
+            <td>Hà Nội</td>
+            <td>Nam</td>
+            <td>
+              <button type="submit">Edit</button>
+              <button type="submit">Delete</button>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+  <script>
+    let indexEdit = undefined; // biến này là biến trung gian để lưu vị trí index của học viên khi nhấn edit
+    function submitStudent() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const address = document.getElementById("address").value;
+      const gender = document.querySelector(
+        "input[name='gender']:checked"
+      ).value;
+
+      let validate = true; // biến kiểm tra validate nếu validate = true thì mới cho lưu
+
+      if (name == "") {
+        alert("Họ và tên sai định dạng");
+        validate = false;
+      }
+      if (email == "" || email.includes("@") == false) {
+        alert("Email sai định dạng");
+        validate = false;
+      }
+      if (
+        phone == "" ||
+        isNaN(phone) ||
+        phone.length < 10 ||
+        phone.length > 11 ||
+        phone[0] != 0
+      ) {
+        alert("Số điện thoại sai định dạng");
+        validate = false;
+      }
+      if (address == "" || typeof address != "string") {
+        alert("Quê quán không được để trống");
+        validate = false;
+      }
+
+      const objStudent = {
+        name: name,
+        email: email,
+        phone: phone,
+        address: address,
+        gender: gender,
+      };
+      const students = JSON.parse(localStorage.getItem("students")) || []; // lấy data từ local storage
+
+      // save local storage
+
+      if (validate && indexEdit == undefined) {
+        // nếu validate = true thì mới cho lưu
+        students.push(objStudent);
+        localStorage.setItem("students", JSON.stringify(students));
+      }
+      if (validate && indexEdit != undefined) {
+        // nếu validate = true thì mới cho lưu
+        students.splice(indexEdit, 1, objStudent);
+        localStorage.setItem("students", JSON.stringify(students));
+      }
+
+      indexEdit = undefined; // gán lại indexEdit = undefined để khi nhấn lưu thì nó sẽ thêm mới học viên chứ không phải sửa học viên
+      render();
+    }
+
+    function render() {
+      const students = JSON.parse(localStorage.getItem("students")) || []; // lấy data từ local storage
+      let html = `        <tr>
+            <th>STT</th>
+            <th>Họ và tên</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Quê quán</th>
+            <th>Giới tính</th>
+            <th>Chức năng</th>
+            <th><button onclick="sortAlphaB()">Sắp xếp theo (alpha b)</button></th>
+        </tr>`;
+      students.forEach((element, index) => {
+        html += `        <tr>
+            <td>${index + 1}</td>
+            <td>${element.name}</td>
+            <td>${element.email}</td>
+            <td>${element.phone}</td>
+            <td>${element.address}</td>
+            <td>${element.gender}</td>
+            <td>
+                <button onclick= "editStudent(${index})">Edit</button>
+                <button onclick ="deleteStudent(${index})">Delete</button>
+            </td>
+            <td></td>
+        </tr>`;
+      });
+      document.getElementById("table-render").innerHTML = html;
+    }
+    render();
+
+    // 2. Khi nhấn delete sẽ xoá học viên trong students và hiển thị thông tin các học viên còn lại
+    function deleteStudent(index) {
+      const students = JSON.parse(localStorage.getItem("students")) || []; // lấy data từ local storage
+      students.splice(index, 1); // xoá 1 phần tử ở vị trí index
+      localStorage.setItem("students", JSON.stringify(students)); // lưu lại data vào local storage
+      render();
+    }
+
+    // 3. Khi nhấn edit, dữ liệu học viên cập nhật được hiển thị trên form “Thông tin học viên”, nhấn lưu lại, thực hiện cập nhật thông tin học viên trong students và hiển thị lại thông tin các học viên trên “Danh sách học viên”
+
+    function editStudent(index) {
+      const students = JSON.parse(localStorage.getItem("students")) || []; // lấy data từ local storage
+      const student = students[index];
+      document.getElementById("name").value = student.name;
+      document.getElementById("email").value = student.email;
+      document.getElementById("phone").value = student.phone;
+      document.getElementById("address").value = student.address;
+      // checked đúng vào vị trí lấy ra của gender
+      if (student.gender == "female") {
+        document.getElementById("female").checked = true;
+      } else {
+        document.getElementById((id = "male")).checked = true;
+      }
+      const submitInput = document.getElementById("submit-input");
+      submitInput.innerHTML = "thay đổi";
+      indexEdit = index;
+      render();
+    }
+
+    function searchStudent() {
+      const students = JSON.parse(localStorage.getItem("students")) || []; // lấy data từ local storage
+      const search = document.getElementById("search").value;
+      const tableRender = document.getElementById("table-render");
+      let html = `        <tr>
+            <th>STT</th>
+            <th>Họ và tên</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Quê quán</th>
+            <th>Giới tính</th>
+            <th>Chức năng</th>
+            <th><button >Sắp xếp theo (alpha b)</button></th>
+        </tr>`;
+      let result = students.filter((element) => {
+        // dùng filter để lọc ra những học viên có tên chứa search
+        return element.name.includes(search); // includes là hàm kiểm tra xem trong chuỗi có chứa chuỗi con hay không
+      });
+
+      result.forEach((element, index) => {
+        html += ` <tr>
+            <td>${index + 1}</td>
+            <td>${element.name}</td>
+            <td>${element.email}</td>
+            <td>${element.phone}</td>
+            <td>${element.address}</td>
+            <td>${element.gender}</td>
+            <td>
+                Search
+            </td>
+            <td></td>
+          </tr>`;
+      });
+
+      tableRender.innerHTML = html;
+    }
+
+    function sortAlphaB() {
+      const students = JSON.parse(localStorage.getItem("students")) || []; // lấy data từ local storage
+      const tableRender = document.getElementById("table-render");
+      let html = `        <tr>
+            <th>STT</th>
+            <th>Họ và tên</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Quê quán</th>
+            <th>Giới tính</th>
+            <th>Chức năng</th>
+            <th><button >Sắp xếp theo alpha b</button></th>
+        </tr>`;
+
+      let newArrayAlphaB = []; // mảng mới để lưu kết quả sắp xếp
+      for (let i = 0; i < students.length; i++) {
+        // sắp xếp theo anpha b
+        for (let j = i + 1; j < students.length; j++) {
+          // duyệt từng phần tử trong mảng
+          if (students[i].name > students[j].name) {
+            // nếu tên học viên ở vị trí i lớn hơn tên học viên ở vị trí j thì đổi chỗ
+            let temp = students[i]; // dùng biến trung gian để đổi chỗ
+            students[i] = students[j]; // đổi chỗ
+            students[j] = temp; // đổi chỗ
+          }
+        }
+        newArrayAlphaB.push(students[i]); // sau khi sắp xếp xong thì push vào mảng mới
+      }
+      // dungf sort để sắp xếp
+      // let newArrayAlphaB = students.sort((a, b) => {
+      //     if(a.name > b.name){
+      //         return 1;
+      //     }
+      //     if(a.name < b.name){
+      //         return -1;
+      //     }
+      //     return 0;
+      // })
+
+      newArrayAlphaB.forEach((element, index) => {
+        html += ` <tr>
+            <td>${index + 1}</td>
+            <td>${element.name}</td>
+            <td>${element.email}</td>
+            <td>${element.phone}</td>
+            <td>${element.address}</td>
+            <td>${element.gender}</td>
+            <td>
+                Sort
+            </td>
+            <td></td>
+          </tr>`;
+      });
+      tableRender.innerHTML = html;
+    }
+  </script>
+</html>

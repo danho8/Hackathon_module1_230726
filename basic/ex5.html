@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5 diffirent number</title>
+  </head>
+  <body>
+    <h4>Nhập 5 số nguyên có giá trị khác nhau:</h4>
+    <input
+      type="text"
+      id="input-number"
+      placeholder="Nhập 5 số nguyên có giá trị khác nhau"
+    />
+    <button id="click-answer" onclick="showAnswer()">Kết quả</button><br />
+    <span>Kết quả: <span id="answer">43</span></span>
+  </body>
+  <script>
+    const getInputNumber = document.getElementById("input-number");
+
+    const newArray = [];
+
+    function checkIsNumber(num) { //kiểm tra xem có phải số nguyên hay không
+      if (isNaN(num)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    function showAnswer() {
+      const getAnswer = document.getElementById("answer"); //lấy thẻ span có id là answer
+      const getInputNumberValue = getInputNumber.value;
+      const array = getInputNumberValue.split(",");
+
+      if (array.length == 5) {
+        const arrayNumber = array.map((item) => parseInt(item)); //chuyển mảng string thành mảng number
+        for (let i = 0; i < arrayNumber.length; i++) { 
+          if (checkIsNumber(arrayNumber[i]) == false) { //kiểm tra xem có phải số nguyên hay không
+            getAnswer.innerHTML =
+              "Vui lòng nhập lại 5 số nguyên có giá trị khác nhau";
+            break;  //nếu không phải số nguyên thì dừng vòng lặp
+          } else {
+            newArray.push(arrayNumber[i]); //nếu là số nguyên thì push vào mảng newArray
+          }
+        }
+
+        newArray.sort((a, b) => b - a); //sắp xếp mảng giảm dần
+        getAnswer.innerHTML = newArray[0]; //lấy phần tử đầu tiên của mảng newArray
+      } else { 
+        getAnswer.innerHTML =
+          "Vui lòng nhập lại 5 số nguyên có giá trị khác nhau";
+      }
+      console.log(newArray);
+    }
+  </script>
+</html>
